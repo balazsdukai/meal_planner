@@ -32,3 +32,54 @@ def dbsession(engine, tables):
     transaction.rollback()
     # put back the connection to the connection pool
     connection.close()
+
+#--- Test data
+@pytest.fixture(scope='session')
+def data_recipes():
+    recipes = {
+        'salty_soup': {
+            'ingredients': [
+                {
+                    'name': 'salt',
+                    'unit': 'tbsp',
+                    'quantity': 1
+                },
+                {
+                    'name': 'water'
+                },
+                {
+                    'name': 'potato',
+                    'unit': 'kg',
+                    'quantity': 0.5
+                }
+            ],
+            'description': 'add salt, water, potato',
+            'nr_meals': 3
+        },
+        'carrot_stew': {
+            'ingredients': [
+                {
+                    'name': 'carrots',
+                    'unit': 'kg',
+                    'quantity': 0.5
+                },
+                {
+                    'name': 'water',
+                    'quantity': 'a dash'
+                },
+                {
+                    'name': 'potato',
+                    'unit': 'kg',
+                    'quantity': 0.2
+                },
+                {
+                    'name': 'salt',
+                    'unit': 'tbsp',
+                    'quantity': 0.5
+                },
+            ],
+            'description': 'mix carrot, water, potato',
+            'nr_meals': 2
+        }
+    }
+    yield recipes
