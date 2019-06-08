@@ -1,0 +1,25 @@
+{% extends "layout.html" %}
+{% block body %}
+<h1>Recepies</h1>
+
+<div class="table-responsive">
+  <table class="table table-sm table-hover">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Recipe</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for recipe in recipes %}
+      <tr>
+        <th scope="row">{{ recipe[0] }}</th>
+        <td>
+          <a href="{{ url_for('recipe', recipe_name=recipe[1]) }}">{{ recipe[1] }}</a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

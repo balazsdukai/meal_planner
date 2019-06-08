@@ -54,5 +54,23 @@ class TestModels:
 class TestDB:
     """Test database operations"""
     # TODO: add
+    def test_add(self, dbsession, data_recipes):
+        recipe_collection = RecepieCollection()
+        for name, r in data_recipes.items():
+            recipe = Recipe(name=name)
+            for i,e in enumerate(r['ingredients']):
+                u = e['unit'] if 'unit' in e else None
+                q = e['quantity'] if 'quantity' in e else None
+                recipe.ingredients.append(
+                    Ingredient(name=IngredientName(name=e['name']),
+                               unit=Unit(name=u),
+                               quantity=q)
+                )
+            recipe.description = r['description']
+            recipe.nr_meals = r['nr_meals']
+            recipe_collection.recipes.append(recipe)
+        dbsession.add(recipe_collection)
+        res = dbsession.query(RecepieCollection)
+        print(res.first())
     # TODO: remove
     # TODO: update in database

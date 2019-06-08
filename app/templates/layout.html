@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  {% if refresh %}
+      <meta  http-equiv="refresh"  content="30">
+  {% endif %}
+  <title>Meal Planner</title>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="{{ url_for('index') }}">Meal Planner</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+      <div class="navbar-nav">
+        <a {% if request.path == '/recipes' %} class="nav-item nav-link active"
+        {% else %} class="nav-item nav-link"
+        {% endif %} href="{{ url_for('recipes') }}">
+        Recipes
+        <span class="sr-only">(current)</span>
+        </a>
+
+        <a {% if request.path == '/create_shopping_list' %} class="nav-item nav-link active"
+        {% else %} class="nav-item nav-link"
+        {% endif %} href="{{ url_for('create_shopping_list') }}">
+        Create shopping list
+        <span class="sr-only">(current)</span>
+        </a>
+
+        <a {% if request.path == '/add_recipe' %} class="nav-item nav-link active"
+        {% else %} class="nav-item nav-link"
+        {% endif %} href="{{ url_for('add_recipe') }}">
+        Add recipe
+        <span class="sr-only">(current)</span>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  {% block body %}
+  <!--    Render the sub-pages here   -->
+  {% endblock %}
+</body>
+</html>

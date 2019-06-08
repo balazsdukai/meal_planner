@@ -1,0 +1,38 @@
+{% extends "layout.html" %}
+{% block body %}
+<h1>Create your shopping list</h1>
+
+<form>
+  <div class="table-responsive">
+    <table class="table table-sm">
+      <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Recipe</th>
+        <th scope="col">Nr. of meals</th>
+        <th scope="col">Select</th>
+      </tr>
+      </thead>
+      <tbody>
+      {% for recipe in recipes %}
+      <tr>
+        <th scope="row">{{ recipe[0] }}</th>
+        <td>{{ recipe[1] }}</td>
+        <td>
+          <input type="text" class="form-control" aria-label="Text input with checkbox">
+        </td>
+        <td>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1">
+          </div>
+        </td>
+      </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <a href="{{ url_for('shopping_list') }}" class="btn btn-primary">
+    Create list
+  </a>
+</form>
+{% endblock %}
