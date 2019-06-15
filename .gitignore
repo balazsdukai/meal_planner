@@ -1,0 +1,8 @@
+# Packaging, enviroments
+Pipfile.lock
+
+# PyCharm
+.idea
+
+# KDE
+.directory

@@ -1,4 +1,42 @@
 {% extends "layout.html" %}
 {% block body %}
-<h1>Add a recipe</h1>
+
+<h1>Add recipe</h1>
+<h2>Ingredients</h2>
+
+<form>
+  <div class="form-row">
+    <div class="form-group col-md-6">
+      <label for="inputName">Name</label>
+      <input type="text" class="form-control" id="inputName">
+    </div>
+    <div class="form-group col-md-2">
+      <label for="inputAmount">Amount</label>
+      <input type="text" class="form-control" id="inputAmount">
+    </div>
+    <div class="form-group col-md-2">
+      <label for="inputUnit">Unit</label>
+      <select id="inputUnit" class="form-control">
+        <option selected>Choose...</option>
+        <option>tbsp</option>
+        <option>tsp</option>
+        <option>ml</option>
+        <option>l</option>
+        <option>cup</option>
+      </select>
+    </div>
+    <button type="submit" id="removeIngredient" class="btn btn-danger">Remove</button>
+  </div>
+  <button type="submit" class="btn btn-secondary">Add another ingredient</button>
+</form>
+
+<h2>Method</h2>
+<form>
+  <div class="form-group">
+    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+  </div>
+</form>
+
+<button type="submit" class="btn btn-primary">Save</button>
+
 {% endblock %}
