@@ -39,17 +39,10 @@
         <span class="sr-only">(current)</span>
         </a>
 
-        <a {% if request.path == '/add_recipe_table' %} class="nav-item nav-link active"
+        <a {% if request.path == '/add_recipe' %} class="nav-item nav-link active"
         {% else %} class="nav-item nav-link"
-        {% endif %} href="{{ url_for('add_recipe_table') }}">
-        Add recipe table
-        <span class="sr-only">(current)</span>
-        </a>
-
-        <a {% if request.path == '/add_recipe_form' %} class="nav-item nav-link active"
-        {% else %} class="nav-item nav-link"
-        {% endif %} href="{{ url_for('add_recipe_form') }}">
-        Add recipe form
+        {% endif %} href="{{ url_for('add_recipe') }}">
+        Add recipe
         <span class="sr-only">(current)</span>
         </a>
       </div>

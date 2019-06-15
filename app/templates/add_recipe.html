@@ -4,19 +4,20 @@
 <h1>Add recipe</h1>
 <h2>Ingredients</h2>
 
-<form>
+<form action="#" method="POST">
+
   <div class="form-row">
     <div class="form-group col-md-6">
-      <label for="inputName">Name</label>
-      <input type="text" class="form-control" id="inputName">
+      <label for="name">Name</label>
+      <input type="text" class="form-control" id="name" name="name">
     </div>
     <div class="form-group col-md-2">
-      <label for="inputAmount">Amount</label>
-      <input type="text" class="form-control" id="inputAmount">
+      <label for="amount">Amount</label>
+      <input type="text" class="form-control" id="amount" name="amount">
     </div>
     <div class="form-group col-md-2">
-      <label for="inputUnit">Unit</label>
-      <select id="inputUnit" class="form-control">
+      <label for="unit">Unit</label>
+      <select class="form-control" id="unit" name="unit">
         <option selected>Choose...</option>
         <option>tbsp</option>
         <option>tsp</option>
@@ -25,18 +26,19 @@
         <option>cup</option>
       </select>
     </div>
-    <button type="submit" id="removeIngredient" class="btn btn-danger">Remove</button>
+    <button type="button" id="remove" class="btn btn-danger">Remove</button>
   </div>
-  <button type="submit" class="btn btn-secondary">Add another ingredient</button>
-</form>
 
-<h2>Method</h2>
-<form>
+  <button type="button" class="btn btn-secondary">Add another ingredient</button>
+
+  <h2>Method</h2>
+
   <div class="form-group">
     <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
   </div>
-</form>
 
-<button type="submit" class="btn btn-primary">Save</button>
+  <button type="submit" class="btn btn-primary">Save</button>
+
+</form>
 
 {% endblock %}

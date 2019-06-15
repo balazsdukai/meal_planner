@@ -1,5 +1,6 @@
 from flask import Flask, flash, redirect, render_template, request, session, abort
 
+
 DEBUG = True
 app = Flask(__name__)
 app.config.from_object(__name__)
@@ -21,9 +22,20 @@ def recipes():
 def recipe(recipe_name):
     return render_template('recipe.html', recipe_name=recipe_name)
 
-@app.route("/add_recipe")
+@app.route("/add_recipe", methods=['GET', 'POST'])
 def add_recipe():
-    return render_template('add_recipe.html')
+    if request.method == 'POST':
+        print("name", request.form.get('name'))
+        print("amount", request.form.get('amount'))
+        print("unit", request.form.get('unit'))
+        # print("name", request.form['name'])
+        # NewItem = Item(name=request.form['name'], description=request.form['description'], price=request.form['price'], category_id = category_id, user_id=category.user_id)
+        # session.add(NewItem)
+        # session.commit()
+        # flash('New Menu %s Item Successfully Created' % (NewItem.name))
+        return render_template('add_recipe.html')
+    else:
+        return render_template('add_recipe.html')
 
 @app.route("/create_shopping_list")
 def create_shopping_list():
