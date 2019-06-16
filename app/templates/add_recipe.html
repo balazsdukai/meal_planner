@@ -4,41 +4,126 @@
 <h1>Add recipe</h1>
 <h2>Ingredients</h2>
 
-<form action="#" method="POST">
-
-  <div class="form-row">
-    <div class="form-group col-md-6">
-      <label for="name">Name</label>
-      <input type="text" class="form-control" id="name" name="name">
-    </div>
-    <div class="form-group col-md-2">
-      <label for="amount">Amount</label>
-      <input type="text" class="form-control" id="amount" name="amount">
-    </div>
-    <div class="form-group col-md-2">
-      <label for="unit">Unit</label>
-      <select class="form-control" id="unit" name="unit">
-        <option selected>Choose...</option>
-        <option>tbsp</option>
-        <option>tsp</option>
-        <option>ml</option>
-        <option>l</option>
-        <option>cup</option>
-      </select>
-    </div>
-    <button type="button" id="remove" class="btn btn-danger">Remove</button>
+<form id="ingredientsForm" method="post", action="">
+  {{ form.hidden_tag() }}
+  <div>
+    <button type="button" class="btn btn-secondary" id="addNewIngredient">Add ingredient</button>
   </div>
 
-  <button type="button" class="btn btn-secondary">Add another ingredient</button>
+  {% for ingredient in form.ingredients %}
+    {{ forms.render_field(ingredient.name) }}
+    {{ forms.render_field(ingredient.amount) }}
+    {{ forms.render_field(ingredient.unit) }}
+  {% endfor %}
+  {{ form.ingredientList }}
 
-  <h2>Method</h2>
+<!--  <div class="form-row" id="ingredients"></div>-->
 
-  <div class="form-group">
-    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
-  </div>
-
-  <button type="submit" class="btn btn-primary">Save</button>
+  {{ form.submit }}
 
 </form>
+
+<script>
+  $(document).ready(function () {
+    var addCount = 1;
+    $("#addNewIngredient").click(function () {
+      var rowDiv = $("<div class='form-row'></div>");
+      $("ingredientsForm").append(rowDiv);
+      var nameInput = $("<input type='text' value=''></input>")
+        .attr("class", "form-control")
+        .attr("id", "name-" + addCount)
+        .attr("name", "name-" + addCount)
+        .attr("type", "text");
+      rowDiv.append(nameInput);
+      var amountInput = $("<input type='text' value=''></input>")
+        .attr("class", "form-control")
+        .attr("id", "amount-" + addCount)
+        .attr("name", "amount-" + addCount)
+        .attr("type", "text");
+      rowDiv.append(amountInput);
+      // var removeButton = $("<input type='button' value='Remove'></input>")
+      //   .attr("class", "remove");
+      // rowDiv.append(removeButton);
+      console.log(rowDiv);
+      $("ingredientsForm").append(rowDiv);
+      addCount++;
+    });
+  });
+
+  // function GetDynamicTextBox(value, addCount) {
+  //   return '<div class="form-row">' + '&nbsp' + addCount + '.&nbsp' +
+  //     '<input name = "name' + addCount + '"type="text" value = "' + value + '" />&nbsp;' +
+  //     '<input name = "amount' + addCount + '"type="text" value = "' + value + '" />&nbsp;' +
+  //     '<input name = "unit' + addCount + '"type="text" value = "' + value + '" />&nbsp;' +
+  //     '<input type="button" value="Remove" class="remove" />' + '</div>';
+  // }
+
+  // $(document).ready(function () {
+  //   var addCount = 1;
+  //   $("#addNewIngredient").click(function () {
+  //     var newInput = $("#ingredientList");
+  //     newInput.append(GetDynamicTextBox("", addCount));
+  //     $("#ingredientList").append(newInput);
+  //     addCount += 1;
+  //   });
+  // });
+  //
+  // function GetDynamicTextBox(value, addCount) {
+  //   return '<div class="form-row">' + '&nbsp' + addCount + '.&nbsp' +
+  //     '<input name = "name' + addCount + '"type="text" value = "' + value + '" />&nbsp;' +
+  //     '<input name = "amount' + addCount + '"type="text" value = "' + value + '" />&nbsp;' +
+  //     '<input name = "unit' + addCount + '"type="text" value = "' + value + '" />&nbsp;' +
+  //     '<input type="button" value="Remove" class="remove" />' + '</div>';
+  // }
+
+  $(function () {
+    $("#addNewIngredient").click(function () {
+        // $("#ingredientList").append(GetDynamicTextBox("", addCount));
+
+    });
+
+    $("body").on("click", ".remove", function () {
+        $(this).closest("div").remove();
+        addCount -= 1;
+    });
+  });
+</script>
+
+<!--<form action="#" method="POST">-->
+
+<!--  <div class="form-row">-->
+<!--    <div class="form-group col-md-6">-->
+<!--      <label for="name">Name</label>-->
+<!--      <input type="text" class="form-control" id="name" name="name">-->
+<!--    </div>-->
+<!--    <div class="form-group col-md-2">-->
+<!--      <label for="amount">Amount</label>-->
+<!--      <input type="text" class="form-control" id="amount" name="amount">-->
+<!--    </div>-->
+<!--    <div class="form-group col-md-2">-->
+<!--      <label for="unit">Unit</label>-->
+<!--      <select class="form-control" id="unit" name="unit">-->
+<!--        <option selected>Choose...</option>-->
+<!--        <option>tbsp</option>-->
+<!--        <option>tsp</option>-->
+<!--        <option>ml</option>-->
+<!--        <option>l</option>-->
+<!--        <option>cup</option>-->
+<!--      </select>-->
+<!--    </div>-->
+<!--    <button type="button" id="remove" class="btn btn-danger">Remove</button>-->
+<!--  </div>-->
+
+<!--  <button type="button" class="btn btn-secondary">Add another ingredient</button>-->
+
+<!--  <h2>Method</h2>-->
+
+<!--  <div class="form-group">-->
+<!--    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>-->
+<!--  </div>-->
+
+<!--  <button type="submit" class="btn btn-primary">Save</button>-->
+
+<!--</form>-->
 
 {% endblock %}

@@ -9,6 +9,7 @@ pytest = "*"
 [packages]
 sqlalchemy = "*"
 flask = "*"
+flask-wtf = "*"
 
 [requires]
 python_version = "3.6"

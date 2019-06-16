@@ -1,9 +1,31 @@
+from os import urandom
 from flask import Flask, flash, redirect, render_template, request, session, abort
-
+from flask_wtf import FlaskForm
+from wtforms import StringField, TextAreaField, DecimalField, SelectField, FieldList, FormField, SubmitField
+from wtforms.validators import DataRequired
+from flask_wtf.csrf import CSRFProtect
 
 DEBUG = True
 app = Flask(__name__)
 app.config.from_object(__name__)
+SECRET_KEY = urandom(32)
+app.config['SECRET_KEY'] = SECRET_KEY
+csrf = CSRFProtect()
+csrf.init_app(app)
+
+
+class AddIngredientForm(FlaskForm):
+    name = StringField('name')
+    amount = DecimalField('amount')
+    unit = SelectField('unit', choices=[('tbsp', 'tbsp'), ('l', 'l'), ('kg', 'kg'), ('cup', 'cup')])
+
+class AddIngredientsForm(FlaskForm):
+    ingredientList = FieldList(FormField(AddIngredientForm), min_entries=0)
+    submit = SubmitField(label='Save')
+
+class AddRecipe(FlaskForm):
+
+    method = TextAreaField('method')
 
 def get_recipes():
     recipes = [(1,'salty soup'), (2,'hummus with hummus sauce'), (3,'tasty pie'),
@@ -22,8 +44,10 @@ def recipes():
 def recipe(recipe_name):
     return render_template('recipe.html', recipe_name=recipe_name)
 
-@app.route("/add_recipe", methods=['GET', 'POST'])
+@app.route("/add_recipe", methods=('GET', 'POST'))
 def add_recipe():
+    ingredients = []
+    form=AddIngredientsForm(ingredients=ingredients)
     if request.method == 'POST':
         print("name", request.form.get('name'))
         print("amount", request.form.get('amount'))
@@ -33,9 +57,9 @@ def add_recipe():
         # session.add(NewItem)
         # session.commit()
         # flash('New Menu %s Item Successfully Created' % (NewItem.name))
-        return render_template('add_recipe.html')
+        return render_template('add_recipe.html', form=form)
     else:
-        return render_template('add_recipe.html')
+        return render_template('add_recipe.html', form=form)
 
 @app.route("/create_shopping_list")
 def create_shopping_list():
