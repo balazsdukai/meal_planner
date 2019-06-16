@@ -1,30 +1,24 @@
-from os import urandom
 from flask import Flask, flash, redirect, render_template, request, session, abort
 from flask_wtf import FlaskForm
 from wtforms import StringField, TextAreaField, DecimalField, SelectField, FieldList, FormField, SubmitField
 from wtforms.validators import DataRequired
 from flask_wtf.csrf import CSRFProtect
 
-DEBUG = True
 app = Flask(__name__)
 app.config.from_object(__name__)
-SECRET_KEY = urandom(32)
-app.config['SECRET_KEY'] = SECRET_KEY
-csrf = CSRFProtect()
-csrf.init_app(app)
-
+app.secret_key = '04d8518b-110d-459c-ad3a-2c44cfb6419a'
+csrf = CSRFProtect(app)
 
 class AddIngredientForm(FlaskForm):
-    name = StringField('name')
+    ingredient_name = StringField()
     amount = DecimalField('amount')
     unit = SelectField('unit', choices=[('tbsp', 'tbsp'), ('l', 'l'), ('kg', 'kg'), ('cup', 'cup')])
+    remove = SubmitField(label='Remove')
 
 class AddIngredientsForm(FlaskForm):
-    ingredientList = FieldList(FormField(AddIngredientForm), min_entries=0)
-    submit = SubmitField(label='Save')
-
-class AddRecipe(FlaskForm):
-
+    ingredient_list = FieldList(FormField(AddIngredientForm), min_entries=1)
+    save = SubmitField(label='Save')
+    add_ingredient = SubmitField(label='Add ingredient')
     method = TextAreaField('method')
 
 def get_recipes():
@@ -48,18 +42,24 @@ def recipe(recipe_name):
 def add_recipe():
     ingredients = []
     form=AddIngredientsForm(ingredients=ingredients)
+
     if request.method == 'POST':
-        print("name", request.form.get('name'))
-        print("amount", request.form.get('amount'))
-        print("unit", request.form.get('unit'))
-        # print("name", request.form['name'])
-        # NewItem = Item(name=request.form['name'], description=request.form['description'], price=request.form['price'], category_id = category_id, user_id=category.user_id)
-        # session.add(NewItem)
-        # session.commit()
-        # flash('New Menu %s Item Successfully Created' % (NewItem.name))
-        return render_template('add_recipe.html', form=form)
-    else:
-        return render_template('add_recipe.html', form=form)
+        if form.add_ingredient.data:
+            form.ingredient_list.append_entry()
+        elif form.save.data:
+            print("Saving form")
+        else:
+            for i, ingredient in enumerate(form.ingredient_list):
+                if ingredient.remove.data:
+                    print("% should be deleted" % ingredient)
+
+    #     # NewItem = Item(name=request.form['name'], description=request.form['description'], price=request.form['price'], category_id = category_id, user_id=category.user_id)
+    #     # session.add(NewItem)
+    #     # session.commit()
+    #     # flash('New Menu %s Item Successfully Created' % (NewItem.name))
+    #     return render_template('add_recipe.html', form=form)
+
+    return render_template('add_recipe.html', form=form)
 
 @app.route("/create_shopping_list")
 def create_shopping_list():

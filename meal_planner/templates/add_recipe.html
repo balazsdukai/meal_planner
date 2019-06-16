@@ -1,0 +1,70 @@
+{% extends "layout.html" %}
+{% block body %}
+
+<h1>Add recipe</h1>
+<h2>Ingredients</h2>
+
+<form method="POST">
+  {{ form.csrf_token }}
+
+  <div>
+    {{ form.add_ingredient(class="bth btn-secondary") }}
+  </div>
+
+  {% for ingredient in form.ingredient_list %}
+    <div class="form-row">
+      {{ ingredient.ingredient_name(size=50, placeholder="Enter ingredient name") }}
+      {{ ingredient.amount(placeholder="Enter amount") }}
+      {{ ingredient.unit }}
+      {{ ingredient.remove(class="btn btn-danger") }}
+    </div>
+  {% endfor %}
+
+  <h2>Method</h2>
+  <div class="form-row">
+    {{ form.method }}
+  </div>
+
+  {{ form.save(class="btn btn-primary") }}
+
+</form>
+
+
+<!--<form action="#" method="POST">-->
+
+<!--  <div class="form-row">-->
+<!--    <div class="form-group col-md-6">-->
+<!--      <label for="name">Name</label>-->
+<!--      <input type="text" class="form-control" id="name" name="name">-->
+<!--    </div>-->
+<!--    <div class="form-group col-md-2">-->
+<!--      <label for="amount">Amount</label>-->
+<!--      <input type="text" class="form-control" id="amount" name="amount">-->
+<!--    </div>-->
+<!--    <div class="form-group col-md-2">-->
+<!--      <label for="unit">Unit</label>-->
+<!--      <select class="form-control" id="unit" name="unit">-->
+<!--        <option selected>Choose...</option>-->
+<!--        <option>tbsp</option>-->
+<!--        <option>tsp</option>-->
+<!--        <option>ml</option>-->
+<!--        <option>l</option>-->
+<!--        <option>cup</option>-->
+<!--      </select>-->
+<!--    </div>-->
+<!--    <button type="button" id="remove" class="btn btn-danger">Remove</button>-->
+<!--  </div>-->
+
+<!--  <button type="button" class="btn btn-secondary">Add another ingredient</button>-->
+
+<!--  <h2>Method</h2>-->
+
+<!--  <div class="form-group">-->
+<!--    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>-->
+<!--  </div>-->
+
+<!--  <button type="submit" class="btn btn-primary">Save</button>-->
+
+<!--</form>-->
+
+{% endblock %}
