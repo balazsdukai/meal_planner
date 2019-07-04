@@ -8,7 +8,7 @@ class Unit(Base):
     """Unit of the ingredient quantity"""
     __tablename__ = 'units'
     id = Column(Integer, primary_key=True)
-    name = Column(String, nullable=False)
+    name = Column(String, nullable=False, unique=True)
 
 class IngredientName(Base):
     """Ingredient name"""
@@ -22,7 +22,7 @@ class Ingredient(Base):
     id = Column(Integer, primary_key=True)
     name_id = Column(Integer, ForeignKey('ingredient_names.id'))
     name = relationship('IngredientName')
-    quantity = Column(Float, nullable=False)
+    quantity = Column(Float)
     unit_id = Column(Integer, ForeignKey('units.id'))
     unit = relationship('Unit')
     recipe_id = Column(Integer, ForeignKey('recipes.id'))

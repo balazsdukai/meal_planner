@@ -65,7 +65,8 @@ def data_recipes():
                 },
                 {
                     'name': 'water',
-                    'quantity': 'a dash'
+                    'quantity': 1,
+                    'unit': 'dash'
                 },
                 {
                     'name': 'potato',
