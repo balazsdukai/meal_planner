@@ -1,10 +1,11 @@
 from flask import Flask, flash, redirect, render_template, request, session, abort
 from flask_wtf import FlaskForm, Form
-from wtforms import StringField, TextAreaField, DecimalField, SelectField, FieldList, FormField, SubmitField
+from wtforms import StringField, TextAreaField, DecimalField, SelectField, FieldList, FormField, SubmitField, IntegerField
 from wtforms.validators import DataRequired
 from flask_wtf.csrf import CSRFProtect
 
 from meal_planner.database import db_session, init_db
+from meal_planner.models import Recipe,Unit,IngredientName,Ingredient
 
 app = Flask(__name__)
 app.config.from_object(__name__)
@@ -20,7 +21,7 @@ def shutdown_session(exception=None):
 class AddIngredientForm(Form):
     units = [('',''),('tbsp', 'tbsp'), ('l', 'l'), ('kg', 'kg'), ('cup', 'cup')]
     ingredientname = StringField()
-    amount = DecimalField('amount')
+    quantity = DecimalField()
     unit = SelectField('unit', choices=units)
 
 class AddIngredientsForm(FlaskForm):
@@ -28,7 +29,9 @@ class AddIngredientsForm(FlaskForm):
     ingredientlist = FieldList(FormField(AddIngredientForm), min_entries=1)
     save = SubmitField(label='Save')
     add_ingredient = SubmitField(label='Add ingredient')
-    method = TextAreaField('method')
+    description = TextAreaField()
+    recipename = StringField()
+    nr_meals = IntegerField()
 
 def get_recipes():
     recipes = [(1,'salty soup'), (2,'hummus with hummus sauce'), (3,'tasty pie'),
@@ -52,7 +55,29 @@ def add_recipe():
     form=AddIngredientsForm()
 
     if form.validate_on_submit():
-        print(form.data)
+        app.logger.debug(form.data)
+
+        recipe = Recipe(name=request.form['recipename'])
+        for i in form.data['ingredientlist']:
+            n = db_session.query(IngredientName).filter(IngredientName.name == i['ingredientname']).first()
+            if not n:
+                n = IngredientName(name=i['ingredientname'])
+                db_session.add(n)
+            if 'unit' in i:
+                u = db_session.query(Unit).filter(Unit.name == i['unit']).first()
+                if not u:
+                    u = Unit(name=i['unit'])
+                    db_session.add(u)
+            else:
+                u = None
+            q = i['quantity'] if 'quantity' in i else None
+            recipe.ingredients.append(Ingredient(name=n,
+                                                 unit=u,
+                                                 quantity=q))
+        recipe.nr_meals = form.data['nr_meals']
+        recipe.description = form.data['description']
+        db_session.add(recipe)
+        db_session.commit()
         return render_template('add_recipe.html', form=form, data=form.data)
 
     #     # NewItem = Item(name=request.form['name'], description=request.form['description'], price=request.form['price'], category_id = category_id, user_id=category.user_id)

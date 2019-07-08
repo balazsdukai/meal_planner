@@ -96,12 +96,19 @@
   <form id="ingredients-form" action="" method="POST" role="form">
     {{ form.hidden_tag() }}
 
+    <div>
+      {{ form.recipename(placeholder="Enter recipe name") }}
+    </div>
+    <div>
+      {{ form.nr_meals(placeholder="How many meals does it serve?") }}
+    </div>
+
     <div id="subforms-container">
       {% for subform in form.ingredientlist %}
         <div id="ingredientlist-{{ loop.index0 }}-form" class="subform" data-index="{{ loop.index0 }}">
           {{ subform.ingredientname(placeholder="Enter ingredient name") }}
 
-          {{ subform.amount(placeholder="Enter amount") }}
+          {{ subform.quantity(placeholder="Enter quantity") }}
 
           {{ subform.unit }}
 
@@ -110,9 +117,9 @@
       {% endfor %}
     </div>
 
-    <h2>Method</h2>
+    <h2>description</h2>
     <div>
-      {{ form.method }}
+      {{ form.description }}
     </div>
 
     <button type="submit" class="btn btn-primary">Save</button>
@@ -126,7 +133,7 @@
   <div id="ingredientlist-_-form" class="is-hidden" data-index="_">
     <input placeholder="Enter ingredient name" id="ingredientlist-_-ingredientname" name="ingredientlist-_-ingredientname" type="text" value="">
 
-    <input placeholder="Enter amount" id="ingredientlist-_-amount" name="ingredientlist-_-amount" type="text">
+    <input placeholder="Enter quantity" id="ingredientlist-_-quantity" name="ingredientlist-_-quantity" type="text">
 
     <select id="ingredientlist-_-unit" name="ingredientlist-_-unit">
       {% for unit in form.units %}
