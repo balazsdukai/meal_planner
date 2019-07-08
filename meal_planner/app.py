@@ -4,10 +4,18 @@ from wtforms import StringField, TextAreaField, DecimalField, SelectField, Field
 from wtforms.validators import DataRequired
 from flask_wtf.csrf import CSRFProtect
 
+from meal_planner.database import db_session, init_db
+
 app = Flask(__name__)
 app.config.from_object(__name__)
 app.secret_key = '04d8518b-110d-459c-ad3a-2c44cfb6419a'
 csrf = CSRFProtect(app)
+
+init_db()
+
+@app.teardown_appcontext
+def shutdown_session(exception=None):
+    db_session.remove()
 
 class AddIngredientForm(Form):
     units = [('',''),('tbsp', 'tbsp'), ('l', 'l'), ('kg', 'kg'), ('cup', 'cup')]
