@@ -1,6 +1,7 @@
 from flask import Flask, flash, redirect, render_template, request, session, abort
 from flask_wtf import FlaskForm, Form
-from wtforms import StringField, TextAreaField, DecimalField, SelectField, FieldList, FormField, SubmitField, IntegerField
+from wtforms import StringField, TextAreaField, DecimalField, SelectField, FieldList, FormField, \
+    SubmitField, IntegerField, BooleanField
 from wtforms.validators import DataRequired
 from flask_wtf.csrf import CSRFProtect
 
@@ -10,7 +11,7 @@ from meal_planner.models import Recipe,Unit,IngredientName,Ingredient
 app = Flask(__name__)
 app.config.from_object(__name__)
 app.secret_key = '04d8518b-110d-459c-ad3a-2c44cfb6419a'
-csrf = CSRFProtect(app)
+# csrf = CSRFProtect(app)
 
 init_db()
 
@@ -42,6 +43,14 @@ class AddIngredientsForm(FlaskForm):
     description = TextAreaField()
     recipename = StringField()
     nr_meals = IntegerField()
+
+class SelectRecipe(Form):
+    nr_meals = IntegerField()
+    select = BooleanField()
+
+class CreateShoppingList(FlaskForm):
+    recipes = FieldList(FormField(SelectRecipe))
+    create = SubmitField(label='Create shopping list')
 
 @app.route("/")
 def index():
@@ -89,10 +98,21 @@ def add_recipe():
 
     return render_template('add_recipe.html', form=form)
 
-@app.route("/create_shopping_list")
+@app.route("/create_shopping_list", methods=('GET', 'POST'))
 def create_shopping_list():
-    recipe_list = [(recipe.id, recipe.name) for recipe in Recipe.query.all()]
-    return render_template('create_shopping_list.html', recipes=recipe_list)
+    recipe_list = []
+    form = CreateShoppingList()
+    for recipe in Recipe.query.all():
+        recipe_list.append((recipe.id, recipe.name))
+        form.recipes.append_entry(SelectRecipe)
+
+    print(form.recipes)
+    # if form.is_submitted():
+    #     app.logger.debug("Create shopping list form is submitted")
+    if form.is_submitted():
+        app.logger.debug(form.data)
+        return render_template('create_shopping_list.html', recipes=recipe_list, form=form)
+    return render_template('create_shopping_list.html', recipes=recipe_list, form=form)
 
 @app.route("/shopping_list")
 def shopping_list():
