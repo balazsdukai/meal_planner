@@ -15,7 +15,7 @@
       <tr>
         <th scope="row">{{ recipe[0] }}</th>
         <td>
-          <a href="{{ url_for('recipe', recipe_name=recipe[1]) }}">{{ recipe[1] }}</a>
+          <a href="{{ url_for('recipe', recipe_id=recipe[0]) }}">{{ recipe[1] }}</a>
         </td>
       </tr>
       {% endfor %}

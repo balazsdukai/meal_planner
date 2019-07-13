@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
 {% block body %}
-<h1>{{ recipe_name }}</h1>
+<h1>{{ recipe.name }}</h1>
 <h2>Ingredients</h2>
 <div class="table-responsive">
   <table class="table table-sm">
@@ -8,20 +8,22 @@
       <tr>
         <th scope="col">#</th>
         <th scope="col">Name</th>
-        <th scope="col">Amount</th>
+        <th scope="col">Quantity</th>
         <th scope="col">Unit</th>
       </tr>
     </thead>
     <tbody>
-      <tr>
-        <th scope="row">1</th>
-        <td>...</td>
-        <td>...</td>
-        <td>...</td>
-      </tr>
+      {% for ingredient in recipe.ingredients %}
+        <tr>
+          <th scope="row">{{ loop.index0 }}</th>
+          <td>{{ ingredient.name.name }}</td>
+          <td>{{ ingredient.quantity }}</td>
+          <td>{{ ingredient.unit.name }}</td>
+        </tr>
+      {% endfor %}
     </tbody>
   </table>
 </div>
 <h2>Preparation</h2>
-<p>Get the bla, put the bla, then cook the bla. You'll get blaa bla blaa.</p>
+<p>{{ recipe.description }}</p>
 {% endblock %}
