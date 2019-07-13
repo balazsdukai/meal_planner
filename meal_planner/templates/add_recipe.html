@@ -110,7 +110,11 @@
 
           {{ subform.quantity(placeholder="Enter quantity") }}
 
-          {{ subform.unit }}
+          <select id="ingredientlist-{{ loop.index0 }}-unit" name="ingredientlist-{{ loop.index0 }}-unit">
+            {% for unit in form.units %}
+              <option value={{ unit[0] }}>{{ unit[1] }}</option>
+            {% endfor %}
+          </select>
 
           <button class="btn btn-danger" href="#">Remove</button>
         </div>

@@ -18,14 +18,24 @@ init_db()
 def shutdown_session(exception=None):
     db_session.remove()
 
+# TODO: I don't know how to pass a variable to a subform. That would be required for populating
+# the Unit choices from the values from the database, so that the Units are queries only once
+# at the beginning when the add_recipe view is initiated. Because with the current setup it would
+# need to query the units for each subform entry.
+# But maybe better to have a single row/form to add an ingredient, and a table below that is
+# dynamically populated with the added ingredients, with the possibility to remove an ingredient.
+# See: https://stackoverflow.com/questions/30668029/creating-a-form-with-a-varying-number-of-repeated-subform-in-flask-wtforms
+# Maybe: https://stackoverflow.com/questions/41232105/populate-wtforms-select-field-using-value-selected-from-previous-field
+# This approach would probably circumvent the need of having units selector in each subform.
+
 class AddIngredientForm(Form):
-    units = [('',''),('tbsp', 'tbsp'), ('l', 'l'), ('kg', 'kg'), ('cup', 'cup')]
     ingredientname = StringField()
     quantity = DecimalField()
-    unit = SelectField('unit', choices=units)
+    unit = SelectField('unit')
 
 class AddIngredientsForm(FlaskForm):
-    units = [('',''),('tbsp', 'tbsp'), ('l', 'l'), ('kg', 'kg'), ('cup', 'cup')]
+    units = [(unit.id, unit.name) for unit in Unit.query.all()]
+    app.logger.debug(units)
     ingredientlist = FieldList(FormField(AddIngredientForm), min_entries=1)
     save = SubmitField(label='Save')
     add_ingredient = SubmitField(label='Add ingredient')
@@ -79,12 +89,6 @@ def add_recipe():
         db_session.add(recipe)
         db_session.commit()
         return render_template('add_recipe.html', form=form, data=form.data)
-
-    #     # NewItem = Item(name=request.form['name'], description=request.form['description'], price=request.form['price'], category_id = category_id, user_id=category.user_id)
-    #     # session.add(NewItem)
-    #     # session.commit()
-    #     # flash('New Menu %s Item Successfully Created' % (NewItem.name))
-    #     return render_template('add_recipe.html', form=form)
 
     return render_template('add_recipe.html', form=form)
 
