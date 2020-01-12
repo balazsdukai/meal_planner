@@ -1,7 +1,7 @@
 from flask import Flask, flash, redirect, render_template, request, session, abort
 from flask_wtf import FlaskForm, Form
 from wtforms import StringField, TextAreaField, DecimalField, SelectField, FieldList, FormField, \
-    SubmitField, IntegerField, BooleanField
+    SubmitField, IntegerField, BooleanField, HiddenField
 from wtforms.validators import DataRequired
 from flask_wtf.csrf import CSRFProtect
 
@@ -44,13 +44,21 @@ class AddIngredientsForm(FlaskForm):
     recipename = StringField()
     nr_meals = IntegerField()
 
-class SelectRecipe(Form):
+class SelectRecipe(FlaskForm):
+    recipe_id = HiddenField()
+    recipe_name = HiddenField()
     nr_meals = IntegerField()
     select = BooleanField()
 
 class CreateShoppingList(FlaskForm):
     recipes = FieldList(FormField(SelectRecipe))
     create = SubmitField(label='Create shopping list')
+
+
+def sum_recipes(form):
+    for i,recipe in enumerate(form['recipes']):
+        if recipe['select']:
+            app.logger.debug("adding recipe to shopping list", recipe)
 
 @app.route("/")
 def index():
@@ -100,19 +108,22 @@ def add_recipe():
 
 @app.route("/create_shopping_list", methods=('GET', 'POST'))
 def create_shopping_list():
-    recipe_list = []
     form = CreateShoppingList()
-    for recipe in Recipe.query.all():
-        recipe_list.append((recipe.id, recipe.name))
-        form.recipes.append_entry(SelectRecipe)
 
-    print(form.recipes)
-    # if form.is_submitted():
-    #     app.logger.debug("Create shopping list form is submitted")
     if form.is_submitted():
         app.logger.debug(form.data)
-        return render_template('create_shopping_list.html', recipes=recipe_list, form=form)
-    return render_template('create_shopping_list.html', recipes=recipe_list, form=form)
+        sum_recipes(form.data)
+        return render_template('create_shopping_list.html', form=form)
+
+    for recipe in Recipe.query.all():
+        print((recipe.id, recipe.name))
+        subform = SelectRecipe()
+        subform.recipe_id = recipe.id
+        subform.recipe_name = recipe.name
+        subform.select = False
+        subform.nr_meals = 0
+        form.recipes.append_entry(subform)
+    return render_template('create_shopping_list.html', form=form)
 
 @app.route("/shopping_list")
 def shopping_list():

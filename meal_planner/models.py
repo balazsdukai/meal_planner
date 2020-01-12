@@ -39,3 +39,6 @@ class RecepieCollection(Base):
     __tablename__ = 'recipe_collection'
     id = Column(Integer, primary_key=True)
     recipes = relationship('Recipe')
+
+# class ShoppingList(Base):
+#     __tablename__ = 'shopping_list'
